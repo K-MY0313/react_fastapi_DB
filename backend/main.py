@@ -3,14 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from . import models, schemas, database
-
+from typing import List
 # データベーステーブルを作成
 models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
 
 # CORSの設定
-origins = ["*"]
+origins = ["http://localhost:3000"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -41,12 +41,12 @@ def create_employee(employee: schemas.EmployeeCreate, db: Session = Depends(data
     db.refresh(db_employee)
     return db_employee
 
-@app.get("/employees/{employee_id}", response_model=schemas.Employee)
-def read_employee(employee_id: int, db: Session = Depends(database.get_db)):
-    db_employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
-    if db_employee is None:
+@app.get("/departments/{department}", response_model=List[schemas.Employee])
+def read_employees_by_department(department: str, db: Session = Depends(database.get_db)):
+    db_employees = db.query(models.Employee).filter(models.Employee.department == department).all()
+    if not db_employees:
         raise HTTPException(status_code=404, detail="社員が見つかりません")
-    return db_employee
+    return db_employees
 
 @app.post("/process/")
 def process_data(data: InputData = Body(...), db: Session = Depends(database.get_db)):
