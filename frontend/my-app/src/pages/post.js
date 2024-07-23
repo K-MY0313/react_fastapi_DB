@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function EmployeepostForm() {
     const [employeeId, setEmployeeId] = useState('');
@@ -27,19 +28,15 @@ function EmployeepostForm() {
         }
     };
 
-    const handleGet = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.get(`http://localhost:8000/departments/${department}`);
-            console.log('Data successfully retrieved:', response.data);
-            setData(response.data);
-        } catch (error) {
-            console.error('There was an error retrieving the data!', error);
-        }
-    };
-
     return (
         <>
+         <Link to="/">
+          最初の画面
+        </Link>
+        <br />
+        <Link to="/get">
+          検索画面
+        </Link>
             <form onSubmit={handlePost}>
                 <div>
                     <label>Employee ID:</label>
@@ -62,13 +59,6 @@ function EmployeepostForm() {
                     <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} />
                 </div>
                 <button type="submit">Submit</button>
-            </form>
-            <form onSubmit={handleGet}>
-                <div>
-                    <label>Department:</label>
-                    <input type="text" value={department} onChange={(e) => setDepartment(e.target.value)} />
-                </div>
-                <button type="submit">Get Employee Data</button>
             </form>
             {data && (
                 <div>
