@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import  SelectionPage from './pages/first';
+import {Route, Routes, Navigate } from 'react-router-dom';
+import { LoginPage, SelectionPage } from './pages/LoginAndSelection';
 import EmployeegetForm from './pages/get';
 import EmployeepostForm from './pages/post';
 
@@ -9,7 +9,9 @@ const App = () => {
    
    
       <Routes>
-        <Route path="/" element={< SelectionPage />} />
+       <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/selection" element={<SelectionPage />} />
         <Route path="/get" element={<EmployeegetForm />} />
         <Route path="/post" element={<EmployeepostForm />} />
       </Routes>

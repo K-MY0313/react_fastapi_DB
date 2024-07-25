@@ -16,3 +16,6 @@ class Employee(EmployeeBase):
 
     class Config:
         orm_mode = True
+
+class LoginRequest(BaseModel):
+    employee_id: str
